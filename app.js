@@ -36,11 +36,26 @@ let account = {
  */
 let loadButton = document.querySelector("#loadButton");
 
+function getBooks() {
+  loadButton.addEventListener("click", fetchBooks());
+}
+
 function fetchBooks() {
   const books = loadBooks();
   processBooks(books);
 }
 
+function processBooks(allBooks) {
+  let unreadBooks = allBooks.filter(book => {
+    if (book.isRead == false) {
+      return book;
+    }
+  });
+
+  let numbers = document.getElementById("unreadCount");
+  numbers.innerHTML = unreadBooks.length;
+}
+getBooks();
 /**
  * Write a function called processBooks that takes 1 parameter named
  * allBooks that is an array of objects. Each book object in the allBooks array
@@ -70,7 +85,10 @@ function fetchBooks() {
  */
 function render(account) {
   let accountEmailNode = document.createTextNode(account.accountEmail);
+  let accountUnreadBooks = document.createTextNode(account.unreadBooks);
+
   document.querySelector("#accountEmail").appendChild(accountEmailNode);
+  document.querySelector("#accountEmail").appendChild(accountUnreadBooks);
 
   // Add your implementation here
 }
