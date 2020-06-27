@@ -46,16 +46,62 @@ function fetchBooks() {
 }
 
 function processBooks(allBooks) {
-  let unreadBooks = allBooks.filter(book => {
+  account.unreadBooks = allBooks.filter(book => {
     if (book.isRead == false) {
       return book;
     }
   });
-
-  let numbers = document.getElementById("unreadCount");
-  numbers.innerHTML = unreadBooks.length;
+  account.readBooks = allBooks.filter(book => {
+    if (book.isRead == true) {
+      return book;
+    }
+  });
 }
 getBooks();
+render(account);
+//let numbersOfRead = document.getElementById("readCount");
+//let numbersOfUnread = document.getElementById("unreadCount");
+//numbersOfRead.innerHTML = account.readBooks.length;
+// numbersOfUnread.innerHTML = account.unreadBooks.length;
+
+account.readBooks.forEach(book => {
+  var td = [];
+  let tr = document.createElement("tr");
+  document.querySelector("#readBooksList").appendChild(tr);
+
+  let getTh = document.querySelectorAll(".books__read th");
+
+  for (var k = 0; k < getTh.length; k++) {
+    td[k] = document.createElement("td");
+    tr.appendChild(td[k]);
+  }
+  td[0].textContent = book.title;
+  td[1].textContent = book.author;
+  td[2].textContent = book.publishDate;
+
+  /* let td1= newTR.appendChild(document.createElement("td"));       
+   let td2= newTR.appendChild(document.createElement("td"));
+   let td3= newTR.appendChild(document.createElement("td"));
+    
+     td1.textContent= book.title;
+     td2.textContent =book.author;
+     td3.textContent = book.publishDate;*/
+});
+
+function changeColor() {
+  var rows = document.querySelectorAll("#readBooksList tr");
+
+  for (var i = 0; i < rows.length; i++) {
+    var currentRow = rows[i];
+
+    currentRow.onclick = function() {
+      this.classList.toggle("starred");
+    };
+  }
+}
+
+changeColor();
+
 /**
  * Write a function called processBooks that takes 1 parameter named
  * allBooks that is an array of objects. Each book object in the allBooks array
@@ -85,10 +131,12 @@ getBooks();
  */
 function render(account) {
   let accountEmailNode = document.createTextNode(account.accountEmail);
-  let accountUnreadBooks = document.createTextNode(account.unreadBooks);
+  let accountUnreadBooks = document.createTextNode(account.unreadBooks.length);
+  let accountReadBooks = document.createTextNode(account.readBooks.length);
 
   document.querySelector("#accountEmail").appendChild(accountEmailNode);
-  document.querySelector("#accountEmail").appendChild(accountUnreadBooks);
+  document.querySelector("#unreadCount").appendChild(accountUnreadBooks);
+  document.querySelector("#readCount").appendChild(accountReadBooks);
 
   // Add your implementation here
 }
